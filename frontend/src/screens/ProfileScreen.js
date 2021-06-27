@@ -1,14 +1,5 @@
-import React, { useEffect, useReducer, useState } from "react";
-import {
-  Row,
-  Col,
-  Image,
-  ListGroup,
-  Button,
-  Card,
-  Form,
-  Dropdown,
-} from "react-bootstrap";
+import React, { useEffect, useState } from "react";
+import { Row, Col, Button, Form } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import Loader from "../components/Loader";
 import Message from "../components/Message";
@@ -51,7 +42,7 @@ function ProfileScreen({ history }) {
 
   const submitHandler = (e) => {
     e.preventDefault();
-    if (password != confirmPassword) {
+    if (password !== confirmPassword) {
       setMessage("Password do not match");
     } else {
       dispatch(
