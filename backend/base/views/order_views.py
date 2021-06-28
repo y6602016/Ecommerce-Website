@@ -14,7 +14,7 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 
 
-@api_view("POST")
+@api_view(["POST"])
 @permission_classes([IsAuthenticated])
 def addOrderItems(request):
     user = request.user
@@ -30,7 +30,7 @@ def addOrderItems(request):
         # 1.create order
         order = Order.objects.create(
             user=user,
-            paymenMethod=data["paymentMethod"],
+            paymentMethod=data["paymentMethod"],
             taxPrice=data["taxPrice"],
             shippingPrice=data["shippingPrice"],
             totalPrice=data["totalPrice"],
@@ -61,5 +61,5 @@ def addOrderItems(request):
             product.countInStock -= item.qty
             product.save()
 
-    serializer = OrderSerializer(order, many=True)
-    return Response(serializer.data)
+        serializer = OrderSerializer(order, many=False)
+        return Response(serializer.data)
