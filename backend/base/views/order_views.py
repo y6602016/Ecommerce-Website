@@ -1,6 +1,4 @@
 from django.shortcuts import render
-from django.http import JsonResponse
-from rest_framework import serializers
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
@@ -75,6 +73,14 @@ def getMyOrders(request):
 
 
 @api_view(["GET"])
+@permission_classes([IsAdminUser])
+def getOrders(request):
+    orders = Order.objects.all()
+    serializer = OrderSerializer(orders, many=True)
+    return Response(serializer.data)
+
+
+@api_view(["GET"])
 @permission_classes([IsAuthenticated])
 def getOrderById(request, pk):
     user = request.user
@@ -102,3 +108,13 @@ def updateOrderToPaid(request, pk):
     order.paidAt = datetime.now()
     order.save()
     return Response({"message": "order was paid"})
+
+
+@api_view(["PUT"])
+@permission_classes([IsAdminUser])
+def updateOrderToDelivered(request, pk):
+    order = Order.objects.get(_id=pk)
+    order.isDelivered = True
+    order.deliveredAt = datetime.now()
+    order.save()
+    return Response({"message": "order was delivered"})
