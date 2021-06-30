@@ -13,6 +13,10 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 from pathlib import Path
 from datetime import timedelta
 import os
+import environ
+
+env = environ.Env()
+environ.Env.read_env()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -27,7 +31,7 @@ SECRET_KEY = "django-insecure-!(x%1h4(%d=7&5(*ia=926#ym)^6)2z1g=fa31=k!tk35r_o9b
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["127.0.0.1", "localhost", "proshop-dev.herokuapp.com/"]
 
 
 # Application definition
@@ -55,6 +59,7 @@ REST_FRAMEWORK = {
 
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -97,7 +102,7 @@ DATABASES = {
         "ENGINE": "django.db.backends.postgresql",
         "NAME": "proshop",
         "USER": "postgres",
-        "PASSWORD": "m22758685",
+        "PASSWORD": env("DB_PASS"),
         "HOST": "proshop-identifier.cl8rzzuwtcxb.us-east-2.rds.amazonaws.com",
         "PORT": "5432",
     }
@@ -149,14 +154,8 @@ MEDIA_URL = "/images/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 STATICFILES_DIRS = [BASE_DIR / "static", BASE_DIR / "frontend/build/static"]
-MEDIA_ROOT = "static/images"
-
-# Bucket
-DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
-AWS_ACCESS_KEY_ID = "AKIAYNEHCQTCNU6VGYMH"
-AWS_SECRET_ACCESS_KEY = "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"
-AWS_STORAGE_BUCKET_NAME = "proshop-bucket-mike"
-AWS_QUERYSTRING_AUTH = False
+MEDIA_ROOT = BASE_DIR / "static/images"
+STATIC_ROOT = BASE_DIR / "staticfiles"
 
 CORS_ALLOW_ALL_ORIGINS = True
 
@@ -183,3 +182,15 @@ SIMPLE_JWT = {
     "SLIDING_TOKEN_LIFETIME": timedelta(minutes=5),
     "SLIDING_TOKEN_REFRESH_LIFETIME": timedelta(days=1),
 }
+
+# Bucket
+# "AKIAYNEHCQTCNU6VGYMH"
+# "6nOP9sS7xBL2jFZvoEPdWTr4Xzqe1h99pCdioimK"
+DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
+AWS_ACCESS_KEY_ID = env("AWS_ACCESS_KEY_ID")
+AWS_SECRET_ACCESS_KEY = env("AWS_SECRET_ACCESS_KEY")
+AWS_STORAGE_BUCKET_NAME = "proshop-bucket-mike"
+AWS_QUERYSTRING_AUTH = False
+
+if os.getcwd() == "/app":
+    DEBUG = False
