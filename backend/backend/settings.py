@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "base.apps.BaseConfig",
     "corsheaders",
+    "storages",
 ]
 
 
@@ -88,9 +89,17 @@ WSGI_APPLICATION = "backend.wsgi.application"
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
 DATABASES = {
+    # "default": {
+    #     "ENGINE": "django.db.backends.sqlite3",
+    #     "NAME": BASE_DIR / "db.sqlite3",
+    # }
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": "proshop",
+        "USER": "postgres",
+        "PASSWORD": "m22758685",
+        "HOST": "proshop-identifier.cl8rzzuwtcxb.us-east-2.rds.amazonaws.com",
+        "PORT": "5432",
     }
 }
 
@@ -141,6 +150,13 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 STATICFILES_DIRS = [BASE_DIR / "static", BASE_DIR / "frontend/build/static"]
 MEDIA_ROOT = "static/images"
+
+# Bucket
+DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
+AWS_ACCESS_KEY_ID = "AKIAYNEHCQTCNU6VGYMH"
+AWS_SECRET_ACCESS_KEY = "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"
+AWS_STORAGE_BUCKET_NAME = "proshop-bucket-mike"
+AWS_QUERYSTRING_AUTH = False
 
 CORS_ALLOW_ALL_ORIGINS = True
 
