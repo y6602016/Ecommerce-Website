@@ -118,7 +118,7 @@ function ProductEditScreen({ match, history }) {
             </Form.Group>
 
             <Form.Group controlId={"price"}>
-              <Form.Label>Name</Form.Label>
+              <Form.Label>Price</Form.Label>
               <Form.Control
                 type="number"
                 placeholder="Enter price"
